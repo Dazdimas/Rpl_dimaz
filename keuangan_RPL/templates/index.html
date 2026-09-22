@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pencatat Keuangan Harian</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; background-color: #f4f4f9; color: #333; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; }
+        .card { background: #eef2f5; padding: 15px; border-radius: 6px; margin-bottom: 20px; }
+        .card h3 { margin: 0 0 10px 0; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], input[type="number"], input[type="date"] { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
+        button:hover { background: #218838; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .text-danger { color: #d9534f; font-weight: bold; }
+        .text-success { color: #5cb85c; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Catatan Keuangan Harian</h2>
+
+    <div class="card">
+        <p><strong>Saldo Awal:</strong> Rp {{ "{:,.0f}".format(saldo_awal) }}</p>
+        <p><strong>Total Pengeluaran:</strong> <span class="text-danger">Rp {{ "{:,.0f}".format(total_pengeluaran) }}</span></p>
+        <hr>
+        <h3>Sisa Saldo Saat Ini: <span class="text-success">Rp {{ "{:,.0f}".format(sisa_saldo) }}</span></h3>
+    </div>
+
+    <div class="card">
+        <h3>+ Tambah Pengeluaran</h3>
+        <form action="/tambah" method="POST">
+            <div class="form-group">
+                <label>Tanggal:</label>
+                <input type="date" name="tanggal" required>
+            </div>
+            <div class="form-group">
+                <label>Keterangan:</label>
+                <input type="text" name="keterangan" placeholder="Contoh: Makan siang" required>
+            </div>
+            <div class="form-group">
+                <label>Nominal (Rp):</label>
+                <input type="number" name="nominal" placeholder="Contoh: 50000" required>
+            </div>
+            <button type="submit">Simpan Transaksi</button>
+        </form>
+    </div>
+
+    <h3>Riwayat Transaksi</h3>
+    {% if transaksi %}
+    <table>
+        <thead>
+            <tr>
+                <th>Tanggal</th>
+                <th>Keterangan</th>
+                <th>Nominal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in transaksi %}
+            <tr>
+                <td>{{ item.tanggal }}</td>
+                <td>{{ item.keterangan }}</td>
+                <td class="text-danger">Rp {{ "{:,.0f}".format(item.nominal) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Belum ada transaksi yang dicatat.</p>
+    {% endif %}
+
+    <div style="margin-top: 30px;">
+        <details>
+            <summary style="cursor: pointer; color: #666;">Atur Ulang Saldo Awal</summary>
+            <form action="/reset-saldo" method="POST" style="margin-top: 10px;">
+                <input type="number" name="saldo_baru" placeholder="Masukkan saldo awal baru" required style="width: 70%; display: inline;">
+                <button type="submit" style="width: 25%; background: #007bff;">Setel</button>
+            </form>
+        </details>
+    </div>
+</div>
+
+</body>
+</html>
