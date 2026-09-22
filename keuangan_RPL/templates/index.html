@@ -6,13 +6,13 @@
     <title>Pencatat Keuangan Harian</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 30px; background-color: #f4f4f9; color: #333; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .container { max-width: 650px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
         h2 { text-align: center; }
         .card { background: #eef2f5; padding: 15px; border-radius: 6px; margin-bottom: 20px; }
         .card h3 { margin: 0 0 10px 0; }
         .form-group { margin-bottom: 12px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input[type="text"], input[type="number"], input[type="date"] { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        input[type="text"], input[type="number"], input[type="date"], select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
         button { background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
         button:hover { background: #218838; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
@@ -20,6 +20,8 @@
         th { background-color: #f2f2f2; }
         .text-danger { color: #d9534f; font-weight: bold; }
         .text-success { color: #5cb85c; font-weight: bold; }
+        .badge-masuk { color: #28a745; font-weight: bold; }
+        .badge-keluar { color: #dc3545; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -28,28 +30,48 @@
     <h2>Catatan Keuangan Harian</h2>
 
     <div class="card">
+        <h3>1. Atur Saldo Awal</h3>
+        <form action="/set-saldo" method="POST">
+            <div class="form-group">
+                <label>Nominal Saldo Awal (Rp):</label>
+                <input type="number" name="saldo_awal" value="{{ saldo_awal }}" required>
+            </div>
+            <button type="submit" style="background: #007bff;">Simpan Saldo Awal</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h3>Ringkasan Keuangan</h3>
         <p><strong>Saldo Awal:</strong> Rp {{ "{:,.0f}".format(saldo_awal) }}</p>
-        <p><strong>Total Pengeluaran:</strong> <span class="text-danger">Rp {{ "{:,.0f}".format(total_pengeluaran) }}</span></p>
+        <p><strong>Total Pemasukan:</strong> <span class="text-success">+ Rp {{ "{:,.0f}".format(total_pemasukan) }}</span></p>
+        <p><strong>Total Pengeluaran:</strong> <span class="text-danger">- Rp {{ "{:,.0f}".format(total_pengeluaran) }}</span></p>
         <hr>
         <h3>Sisa Saldo Saat Ini: <span class="text-success">Rp {{ "{:,.0f}".format(sisa_saldo) }}</span></h3>
     </div>
 
     <div class="card">
-        <h3>+ Tambah Pengeluaran</h3>
+        <h3>2. Catat Transaksi Baru</h3>
         <form action="/tambah" method="POST">
             <div class="form-group">
                 <label>Tanggal:</label>
                 <input type="date" name="tanggal" required>
             </div>
             <div class="form-group">
+                <label>Jenis Transaksi:</label>
+                <select name="jenis" required>
+                    <option value="pengeluaran">Pengeluaran (Saldo Berkurang)</option>
+                    <option value="pemasukan">Pemasukan (Saldo Bertambah)</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <label>Keterangan:</label>
-                <input type="text" name="keterangan" placeholder="Contoh: Makan siang" required>
+                <input type="text" name="keterangan" placeholder="Contoh: Makan siang / Kiriman ortu" required>
             </div>
             <div class="form-group">
                 <label>Nominal (Rp):</label>
                 <input type="number" name="nominal" placeholder="Contoh: 50000" required>
             </div>
-            <button type="submit">Simpan Transaksi</button>
+            <button type="submit">Tambah Transaksi</button>
         </form>
     </div>
 
@@ -59,6 +81,7 @@
         <thead>
             <tr>
                 <th>Tanggal</th>
+                <th>Jenis</th>
                 <th>Keterangan</th>
                 <th>Nominal</th>
             </tr>
@@ -67,8 +90,21 @@
             {% for item in transaksi %}
             <tr>
                 <td>{{ item.tanggal }}</td>
+                <td>
+                    {% if item.jenis == 'pemasukan' %}
+                        <span class="badge-masuk">Pemasukan</span>
+                    {% else %}
+                        <span class="badge-keluar">Pengeluaran</span>
+                    {% endif %}
+                </td>
                 <td>{{ item.keterangan }}</td>
-                <td class="text-danger">Rp {{ "{:,.0f}".format(item.nominal) }}</td>
+                <td>
+                    {% if item.jenis == 'pemasukan' %}
+                        <span class="text-success">+ Rp {{ "{:,.0f}".format(item.nominal) }}</span>
+                    {% else %}
+                        <span class="text-danger">- Rp {{ "{:,.0f}".format(item.nominal) }}</span>
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -77,15 +113,6 @@
     <p>Belum ada transaksi yang dicatat.</p>
     {% endif %}
 
-    <div style="margin-top: 30px;">
-        <details>
-            <summary style="cursor: pointer; color: #666;">Atur Ulang Saldo Awal</summary>
-            <form action="/reset-saldo" method="POST" style="margin-top: 10px;">
-                <input type="number" name="saldo_baru" placeholder="Masukkan saldo awal baru" required style="width: 70%; display: inline;">
-                <button type="submit" style="width: 25%; background: #007bff;">Setel</button>
-            </form>
-        </details>
-    </div>
 </div>
 
 </body>
