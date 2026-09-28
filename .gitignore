@@ -1,0 +1,4 @@
+.env
+backend/data_storage.json
+.vscode/
+.idea/
