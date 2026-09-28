@@ -1,5 +1,7 @@
 💰 Sistem Informasi Pencatat Keuangan Harian
+
 Sistem Informasi Pencatat Keuangan Harian Berbasis Web
+
 📌 Deskripsi
 Sistem Informasi Pencatat Keuangan Harian adalah aplikasi berbasis web yang dibuat untuk membantu pengguna mencatat dan memantau arus kas harian secara sederhana dan terorganisir. Aplikasi ini memungkinkan pengguna untuk mencatat pemasukan, pengeluaran, serta saldo yang tersisa berdasarkan transaksi yang telah dilakukan.
 
