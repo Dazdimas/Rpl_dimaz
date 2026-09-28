@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pencatat Keuangan</title>
+    <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+    <div class="container">
+        <h1>Pencatat Keuangan</h1>
+
+        <section class="summary">
+            <div class="card">
+                <label>Saldo Awal</label>
+                <strong id="saldoAwal">Rp 0</strong>
+            </div>
+            <div class="card pemasukan">
+                <label>Pemasukan</label>
+                <strong id="totalPemasukan">Rp 0</strong>
+            </div>
+            <div class="card pengeluaran">
+                <label>Pengeluaran</label>
+                <strong id="totalPengeluaran">Rp 0</strong>
+            </div>
+            <div class="card saldo">
+                <label>Saldo Akhir</label>
+                <strong id="saldoAkhir">Rp 0</strong>
+            </div>
+        </section>
+
+        <section class="form-box">
+            <h2>Tambah Transaksi</h2>
+            <form id="formTransaksi">
+                <div class="grid-form">
+                    <div>
+                        <label for="tanggal">Tanggal</label>
+                        <input type="date" id="tanggal" name="tanggal" required />
+                    </div>
+                    <div>
+                        <label for="jenis">Jenis</label>
+                        <select id="jenis" name="jenis" required>
+                            <option value="pemasukan">Pemasukan</option>
+                            <option value="pengeluaran">Pengeluaran</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="nominal">Nominal</label>
+                        <input type="number" id="nominal" name="nominal" min="1" required />
+                    </div>
+                    <div>
+                        <label for="keterangan">Keterangan</label>
+                        <input type="text" id="keterangan" name="keterangan" placeholder="Contoh: Gaji bulanan" required />
+                    </div>
+                </div>
+                <button type="submit">Simpan Transaksi</button>
+            </form>
+        </section>
+
+        <section class="table-box">
+            <h2>Riwayat Transaksi</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Jenis</th>
+                        <th>Keterangan</th>
+                        <th>Nominal</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </section>
+    </div>
+
+    <script src="assets/app.js"></script>
+</body>
+</html>
