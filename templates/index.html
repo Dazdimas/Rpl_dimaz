@@ -70,7 +70,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="tanggal">Tanggal Transaksi:</label>
-                    <input type="date" id="tanggal" name="tanggal" required>
+                    <input type="date" id="tanggal" name="tanggal" value="{{ hari_ini }}" required>
                 </div>
                 <div class="form-group">
                     <label for="jenis">Jenis Transaksi:</label>
@@ -145,15 +145,6 @@
         {% endif %}
     </div>
 </div>
-
-<script>
-    // Set default tanggal hari ini pada input tanggal
-    const tglInput = document.getElementById('tanggal');
-    if (tglInput && !tglInput.value) {
-        const today = new Date().toISOString().split('T')[0];
-        tglInput.value = today;
-    }
-</script>
 
 </body>
 </html>

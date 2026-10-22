@@ -1,3 +1,4 @@
+from datetime import date
 from flask import Flask, render_template, request, redirect, url_for, flash
 from keuangan_service import PencatatKeuangan
 
@@ -12,7 +13,8 @@ def index():
     """Menampilkan dashboard pencatatan keuangan dan ringkasan."""
     ringkasan = service.get_ringkasan()
     transaksi = service.transaksi
-    return render_template('index.html', ringkasan=ringkasan, transaksi=transaksi)
+    return render_template('index.html', ringkasan=ringkasan, transaksi=transaksi,
+                           hari_ini=date.today().isoformat())
 
 @app.route('/set-saldo', methods=['POST'])
 def set_saldo():
