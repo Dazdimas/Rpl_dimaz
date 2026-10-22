@@ -1,49 +1,63 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for, flash
+from keuangan_service import PencatatKeuangan
 
 app = Flask(__name__)
+app.secret_key = 'kunci-rahasia-pencatat-keuangan-rpl'
 
-saldo_awal = 0
-transaksi = []
+# Inisialisasi Service Pencatat Keuangan
+service = PencatatKeuangan(saldo_awal=0)
 
 @app.route('/')
 def index():
-    total_pemasukan = sum(t['nominal'] for t in transaksi if t['jenis'] == 'pemasukan')
-    total_pengeluaran = sum(t['nominal'] for t in transaksi if t['jenis'] == 'pengeluaran')
-    sisa_saldo = saldo_awal + total_pemasukan - total_pengeluaran
-    
-    return render_template(
-        'index.html', 
-        saldo_awal=saldo_awal, 
-        transaksi=transaksi, 
-        total_pemasukan=total_pemasukan,
-        total_pengeluaran=total_pengeluaran, 
-        sisa_saldo=sisa_saldo
-    )
+    """Menampilkan dashboard pencatatan keuangan dan ringkasan."""
+    ringkasan = service.get_ringkasan()
+    transaksi = service.transaksi
+    return render_template('index.html', ringkasan=ringkasan, transaksi=transaksi)
 
 @app.route('/set-saldo', methods=['POST'])
 def set_saldo():
-    global saldo_awal
-    nominal_saldo = request.form.get('saldo_awal')
-    if nominal_saldo:
-        saldo_awal = int(nominal_saldo)
-    return redirect('/')
+    """User Story 1: Mengatur nominal saldo awal."""
+    nominal = request.form.get('saldo_awal')
+    try:
+        service.set_saldo_awal(nominal)
+        flash("Saldo awal berhasil disimpan!", "success")
+    except ValueError as e:
+        flash(str(e), "danger")
+    return redirect(url_for('index'))
 
 @app.route('/tambah', methods=['POST'])
 def tambah_transaksi():
-    keterangan = request.form.get('keterangan')
-    nominal = request.form.get('nominal')
+    """User Story 2 & 3: Menambahkan transaksi baru (pemasukan/pengeluaran)."""
     tanggal = request.form.get('tanggal')
     jenis = request.form.get('jenis')
+    keterangan = request.form.get('keterangan')
+    nominal = request.form.get('nominal')
 
-    if keterangan and nominal and tanggal and jenis:
-        transaksi.append({
-            'keterangan': keterangan,
-            'nominal': int(nominal),
-            'tanggal': tanggal,
-            'jenis': jenis
-        })
-    
-    return redirect('/')
+    try:
+        service.tambah_transaksi(tanggal=tanggal, jenis=jenis, keterangan=keterangan, nominal=nominal)
+        flash(f"Transaksi {jenis} '{keterangan}' berhasil ditambahkan!", "success")
+    except ValueError as e:
+        flash(str(e), "danger")
+
+    return redirect(url_for('index'))
+
+@app.route('/hapus/<int:transaksi_id>', methods=['POST'])
+def hapus_transaksi(transaksi_id):
+    """User Story 4: Menghapus data transaksi berdasarkan ID."""
+    try:
+        hapus_item = service.hapus_transaksi(transaksi_id)
+        flash(f"Transaksi '{hapus_item['keterangan']}' berhasil dihapus.", "success")
+    except ValueError as e:
+        flash(str(e), "danger")
+
+    return redirect(url_for('index'))
+
+@app.route('/reset', methods=['POST'])
+def reset():
+    """Mereset seluruh data saldo dan transaksi."""
+    service.reset_data()
+    flash("Seluruh data keuangan berhasil direset ke 0.", "success")
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5000)

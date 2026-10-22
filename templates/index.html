@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Pencatat Keuangan Harian</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --success: #2ec4b6;
+            --danger: #e71d36;
+            --warning: #ff9f1c;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            color: var(--dark);
+            padding: 30px 15px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            color: #1e293b;
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+        .header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        .alert-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        .grid-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .summary-card {
+            background: white;
+            padding: 18px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--primary);
+        }
+        .summary-card.masuk { border-top-color: var(--success); }
+        .summary-card.keluar { border-top-color: var(--danger); }
+        .summary-card.saldo { border-top-color: #3b82f6; }
+        .summary-card.defisit { border-top-color: #dc2626; background: #fff5f5; }
+        .summary-card h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+        .summary-card .value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1e293b;
+        }
+        .val-masuk { color: #059669; }
+        .val-keluar { color: #dc2626; }
+        .val-saldo { color: #2563eb; }
+        .val-defisit { color: #dc2626; }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        .card h3 {
+            font-size: 17px;
+            margin-bottom: 16px;
+            color: #1e293b;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+        .form-group {
+            margin-bottom: 14px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+        }
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        .btn-success { background: #059669; }
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+            width: auto;
+        }
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background-color: #f8fafc;
+            color: #64748b;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-masuk {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .badge-keluar {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>💰 Pencatat Keuangan Harian</h1>
+        <p>Aplikasi Pengelolaan Arus Kas Pribadi Berbasis Web</p>
+    </div>
+
+    <!-- Flash Messages (User Story 5) -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Ringkasan Keuangan (User Story 3) -->
+    <div class="grid-summary">
+        <div class="summary-card">
+            <h4>Saldo Awal</h4>
+            <div class="value">Rp {{ "{:,.0f}".format(ringkasan.saldo_awal) }}</div>
+        </div>
+        <div class="summary-card masuk">
+            <h4>Total Pemasukan</h4>
+            <div class="value val-masuk">+ Rp {{ "{:,.0f}".format(ringkasan.total_pemasukan) }}</div>
+        </div>
+        <div class="summary-card keluar">
+            <h4>Total Pengeluaran</h4>
+            <div class="value val-keluar">- Rp {{ "{:,.0f}".format(ringkasan.total_pengeluaran) }}</div>
+        </div>
+        <div class="summary-card {{ 'defisit' if ringkasan.is_defisit else 'saldo' }}">
+            <h4>{{ 'Defisit Saldo!' if ringkasan.is_defisit else 'Sisa Saldo Akhir' }}</h4>
+            <div class="value {{ 'val-defisit' if ringkasan.is_defisit else 'val-saldo' }}">
+                Rp {{ "{:,.0f}".format(ringkasan.sisa_saldo) }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Form 1: Pengaturan Saldo Awal (User Story 1) -->
+    <div class="card">
+        <h3>⚙️ Atur Saldo Awal</h3>
+        <form action="/set-saldo" method="POST">
+            <div class="form-row">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label for="saldo_awal">Nominal Saldo Awal (Rp):</label>
+                    <input type="number" id="saldo_awal" name="saldo_awal" min="0" step="any" value="{{ ringkasan.saldo_awal | int }}" required placeholder="Contoh: 1000000">
+                </div>
+                <div style="display:flex; align-items:flex-end;">
+                    <button type="submit" class="btn">Simpan Saldo Awal</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Form 2: Tambah Transaksi (User Story 2 & 3) -->
+    <div class="card">
+        <h3>📝 Tambah Transaksi Baru</h3>
+        <form action="/tambah" method="POST">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="tanggal">Tanggal Transaksi:</label>
+                    <input type="date" id="tanggal" name="tanggal" required>
+                </div>
+                <div class="form-group">
+                    <label for="jenis">Jenis Transaksi:</label>
+                    <select id="jenis" name="jenis" required>
+                        <option value="pengeluaran">Pengeluaran (Uang Keluar)</option>
+                        <option value="pemasukan">Pemasukan (Uang Masuk)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="keterangan">Keterangan / Deskripsi:</label>
+                    <input type="text" id="keterangan" name="keterangan" placeholder="Contoh: Makan siang, Gaji, dll." required>
+                </div>
+                <div class="form-group">
+                    <label for="nominal">Nominal (Rp):</label>
+                    <input type="number" id="nominal" name="nominal" min="1" step="any" placeholder="Contoh: 50000" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success">+ Tambah Transaksi</button>
+        </form>
+    </div>
+
+    <!-- Tabel Riwayat Transaksi (User Story 4) -->
+    <div class="card">
+        <h3>📜 Riwayat Transaksi ({{ transaksi | length }})</h3>
+        {% if transaksi %}
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Tanggal</th>
+                    <th>Jenis</th>
+                    <th>Keterangan</th>
+                    <th>Nominal</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in transaksi %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ item.tanggal }}</td>
+                    <td>
+                        {% if item.jenis == 'pemasukan' %}
+                            <span class="badge badge-masuk">Pemasukan</span>
+                        {% else %}
+                            <span class="badge badge-keluar">Pengeluaran</span>
+                        {% endif %}
+                    </td>
+                    <td><strong>{{ item.keterangan }}</strong></td>
+                    <td>
+                        {% if item.jenis == 'pemasukan' %}
+                            <span class="val-masuk">+ Rp {{ "{:,.0f}".format(item.nominal) }}</span>
+                        {% else %}
+                            <span class="val-keluar">- Rp {{ "{:,.0f}".format(item.nominal) }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form action="/hapus/{{ item.id }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus transaksi ini?');" style="display:inline;">
+                            <button type="submit" class="btn-delete">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <p>Belum ada transaksi yang dicatat. Silakan tambahkan transaksi baru di atas.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    // Set default tanggal hari ini pada input tanggal
+    const tglInput = document.getElementById('tanggal');
+    if (tglInput && !tglInput.value) {
+        const today = new Date().toISOString().split('T')[0];
+        tglInput.value = today;
+    }
+</script>
+
+</body>
+</html>
