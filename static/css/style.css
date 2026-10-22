@@ -207,3 +207,48 @@ th {
     color: #94a3b8;
     font-size: 14px;
 }
+.form-group-flush {
+    margin-bottom: 0;
+}
+.form-action {
+    display: flex;
+    align-items: flex-end;
+}
+.form-inline {
+    display: inline;
+}
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+}
+.card-header h3 {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+.error-page {
+    text-align: center;
+    padding: 40px 22px;
+}
+.error-page .kode {
+    font-size: 56px;
+    font-weight: 800;
+    color: var(--primary);
+}
+.error-page p {
+    color: #64748b;
+    margin: 10px 0 22px;
+}
+.error-page .btn {
+    display: inline-block;
+    text-decoration: none;
+}

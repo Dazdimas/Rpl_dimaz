@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Pencatat Keuangan Harian</title>
+    <link rel="icon" href="data:,">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -50,13 +51,14 @@
     <!-- Form 1: Pengaturan Saldo Awal (User Story 1) -->
     <div class="card">
         <h3>⚙️ Atur Saldo Awal</h3>
-        <form action="/set-saldo" method="POST">
+        <form action="{{ url_for('set_saldo') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="form-row">
-                <div class="form-group" style="margin-bottom:0;">
+                <div class="form-group form-group-flush">
                     <label for="saldo_awal">Nominal Saldo Awal (Rp):</label>
-                    <input type="number" id="saldo_awal" name="saldo_awal" min="0" step="any" value="{{ ringkasan.saldo_awal | int }}" required placeholder="Contoh: 1000000">
+                    <input type="number" id="saldo_awal" name="saldo_awal" min="0" max="1000000000000" step="any" value="{{ ringkasan.saldo_awal | int }}" required placeholder="Contoh: 1000000">
                 </div>
-                <div style="display:flex; align-items:flex-end;">
+                <div class="form-action">
                     <button type="submit" class="btn">Simpan Saldo Awal</button>
                 </div>
             </div>
@@ -66,7 +68,8 @@
     <!-- Form 2: Tambah Transaksi (User Story 2 & 3) -->
     <div class="card">
         <h3>📝 Tambah Transaksi Baru</h3>
-        <form action="/tambah" method="POST">
+        <form action="{{ url_for('tambah_transaksi') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="form-row">
                 <div class="form-group">
                     <label for="tanggal">Tanggal Transaksi:</label>
@@ -83,11 +86,11 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="keterangan">Keterangan / Deskripsi:</label>
-                    <input type="text" id="keterangan" name="keterangan" placeholder="Contoh: Makan siang, Gaji, dll." required>
+                    <input type="text" id="keterangan" name="keterangan" placeholder="Contoh: Makan siang, Gaji, dll." maxlength="100" required>
                 </div>
                 <div class="form-group">
                     <label for="nominal">Nominal (Rp):</label>
-                    <input type="number" id="nominal" name="nominal" min="1" step="any" placeholder="Contoh: 50000" required>
+                    <input type="number" id="nominal" name="nominal" min="1" max="1000000000000" step="any" placeholder="Contoh: 50000" required>
                 </div>
             </div>
             <button type="submit" class="btn btn-success">+ Tambah Transaksi</button>
@@ -96,7 +99,15 @@
 
     <!-- Tabel Riwayat Transaksi (User Story 4) -->
     <div class="card">
-        <h3>📜 Riwayat Transaksi ({{ transaksi | length }})</h3>
+        <div class="card-header">
+            <h3>📜 Riwayat Transaksi ({{ transaksi | length }})</h3>
+            {% if transaksi or ringkasan.saldo_awal %}
+            <form action="{{ url_for('reset') }}" method="POST" data-confirm="Semua saldo dan transaksi akan dihapus permanen. Lanjutkan?">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn-delete">Reset Semua Data</button>
+            </form>
+            {% endif %}
+        </div>
         {% if transaksi %}
         <table>
             <thead>
@@ -130,7 +141,8 @@
                         {% endif %}
                     </td>
                     <td>
-                        <form action="/hapus/{{ item.id }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus transaksi ini?');" style="display:inline;">
+                        <form action="{{ url_for('hapus_transaksi', transaksi_id=item.id) }}" method="POST" class="form-inline" data-confirm="Apakah Anda yakin ingin menghapus transaksi '{{ item.keterangan }}'?">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <button type="submit" class="btn-delete">Hapus</button>
                         </form>
                     </td>
@@ -146,6 +158,7 @@
     </div>
 </div>
 
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>
 

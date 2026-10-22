@@ -1,6 +1,8 @@
+import os
+import tempfile
 import unittest
 from keuangan_service import PencatatKeuangan
-from app import app
+from app import create_app
 
 class TestHapusDanValidasi(unittest.TestCase):
     """
@@ -11,7 +13,18 @@ class TestHapusDanValidasi(unittest.TestCase):
 
     def setUp(self):
         self.tracker = PencatatKeuangan(saldo_awal=500000)
+        self.tmp = tempfile.TemporaryDirectory()
+        app = create_app({
+            'TESTING': True,
+            'DATABASE': os.path.join(self.tmp.name, 'uji.db'),
+            'LOG_TO_FILE': False,
+            'CSRF_ENABLED': False,
+            'SECRET_KEY': 'kunci-uji',
+        })
         self.app_client = app.test_client()
+
+    def tearDown(self):
+        self.tmp.cleanup()
 
     def test_hapus_transaksi_berdasarkan_id_sukses(self):
         """Memastikan transaksi yang dipilih berhasil dihapus dari daftar."""

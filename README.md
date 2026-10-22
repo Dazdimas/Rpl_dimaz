@@ -8,7 +8,7 @@ Aplikasi web sederhana dan andal untuk mencatat arus kas harian pribadi, mengelo
 - **Nama Produk:** Sistem Informasi Pencatat Keuangan Harian
 - **Kategori:** Aplikasi Web Manajemen Finansial Pribadi
 - **Tujuan Utama:** Membantu pengguna memonitor arus kas harian tanpa perhitungan manual yang rentan kesalahan (*human error*).
-- **Teknologi:** Python 3 (Flask), HTML5, CSS3, JavaScript, Python Unittest.
+- **Teknologi:** Python 3 (Flask), SQLite, HTML5, CSS3, JavaScript, Python Unittest.
 
 ---
 
@@ -28,7 +28,7 @@ Pada saat kode awal dijalankan dengan perintah `python app.py`:
 flowchart TD
     User([Pengguna / Browser]) -->|1. Submit Form Saldo / Transaksi| Controller[Flask Web Controller: app.py]
     Controller -->|2. Validasi & Operasi Bisnis| Service[Business Logic Layer: keuangan_service.py]
-    Service -->|3. Hitung Saldo & Simpan Data| Storage[(In-Memory Transaction Store)]
+    Service -->|3. Hitung Saldo & Simpan Data| Storage[(SQLite: penyimpanan.py → data/keuangan.db)]
     Storage -->|4. Kembalikan State & Ringkasan| Service
     Service -->|5. Data Ringkasan & Transaksi| Controller
     Controller -->|6. Render Template dengan Context| View[Jinja2 View: templates/index.html]
@@ -136,48 +136,101 @@ OK (ALL PASSED)
 
 ---
 
-## 💻 5. Panduan Menjalankan Aplikasi dan Testing
+## 🏁 5. Pertemuan 7: Penyelesaian MVP
 
-### 1. Prasyarat Sistem
-- Python 3.8 ke atas (Direkomendasikan Python 3.10 - 3.13)
-- Paket Flask (`pip install Flask`)
+MVP versi final (v1.0.0) melengkapi seluruh fitur inti dan menyiapkan aplikasi untuk didemonstrasikan:
 
-### 2. Menjalankan Server Aplikasi
-Jalankan perintah berikut di terminal pada folder proyek:
-```bash
-python app.py
-```
-Buka browser dan akses alamat:
-```
-http://127.0.0.1:5000
-```
+- **Integrasi penuh UI ↔ logika ↔ penyimpanan:** data disimpan permanen di SQLite dan tersedia lewat API JSON `GET /api/ringkasan`.
+- **Penanganan kondisi khusus:** data kosong, input tidak valid, indikator loading, gangguan database, serta halaman error 400/404/405/413/500.
+- **Keamanan:** CSRF, header keamanan, debug mati secara default, `SECRET_KEY` dari environment, dan dependensi bebas CVE.
+- **Pengujian:** **55 unit test di 9 file — ALL PASSED**, termasuk uji integrasi end-to-end dan uji keamanan.
 
-### 3. Menjalankan Semua Unit Test
-Untuk memverifikasi seluruh aturan bisnis dan memastikan status **ALL PASSED**:
-```bash
-python -m unittest discover -s tests -v
-```
+| Dokumen Pengumpulan | Isi |
+|---|---|
+| [`HowToRun.md`](HowToRun.md) | Petunjuk instalasi & menjalankan aplikasi dari fresh clone |
+| [`checklist_mvp.md`](checklist_mvp.md) | Checklist seluruh fitur MVP beserta status pengujian |
+| [`demo.mp4`](demo.mp4) | Video demo alur lengkap aplikasi |
+| [`docs/LAPORAN_KEAMANAN.md`](docs/LAPORAN_KEAMANAN.md) | Hasil uji keamanan (bandit, pip-audit, unit test) & perbaikannya |
+| [`docs/LOG_DAN_ERROR.md`](docs/LOG_DAN_ERROR.md) | Contoh log aman, penyebab error, dan tindakan perbaikan |
+| [`CHANGELOG.md`](CHANGELOG.md) | Catatan perubahan setiap versi |
 
 ---
 
-## 📂 6. Struktur Direktori Proyek
+## 💻 6. Instalasi Ulang & Akses Aplikasi
+
+Panduan lengkap beserta troubleshooting ada di [`HowToRun.md`](HowToRun.md). Versi ringkasnya:
+
+### 1. Prasyarat
+- Python 3.10 – 3.13 dan Git
+- Tidak perlu memasang database. SQLite sudah bawaan Python.
+
+### 2. Instalasi ulang dari nol (fresh clone)
+```bash
+git clone https://github.com/Dazdimas/Rpl_dimaz.git
+cd Rpl_dimaz
+python -m venv venv
+# Windows:      .\venv\Scripts\Activate.ps1
+# Linux/macOS:  source venv/bin/activate
+python -m pip install -r requirements.txt
+```
+
+### 3. Verifikasi dengan unit test
+```bash
+python -m unittest discover -s tests -v
+# Ran 55 tests ... OK
+```
+
+### 4. Jalankan & akses aplikasi
+```bash
+python app.py
+```
+| Akses | Alamat |
+|---|---|
+| Dashboard | http://127.0.0.1:5000 |
+| API JSON | http://127.0.0.1:5000/api/ringkasan |
+| Database | `data/keuangan.db` (dibuat otomatis) |
+| Log | `logs/app.log` |
+
+Untuk memulai dari data kosong, hentikan server lalu hapus folder `data/`.
+
+### 5. Paket demo
+Rekaman alur lengkap ada di [`demo.mp4`](demo.mp4) (±56 detik): data kosong → atur saldo awal → pemasukan → pengeluaran → validasi input salah → defisit → hapus → data tetap ada setelah refresh → API JSON → halaman 404 → reset.
+
+---
+
+## 📂 7. Struktur Direktori Proyek
 
 ```text
 Rpl_dimaz/
-├── app.py                      # Controller & Flask Route Handlers
-├── keuangan_service.py          # Lapisan Layanan Bisnis & Model
-├── requirements.txt            # Dependensi proyek (Flask)
+├── app.py                      # Controller Flask: route, CSRF, header keamanan, logging, error handler
+├── keuangan_service.py         # Lapisan logika bisnis & validasi
+├── penyimpanan.py              # Lapisan penyimpanan data (SQLite)
+├── requirements.txt            # Dependensi proyek (versi di-pin)
 ├── README.md                   # Dokumentasi lengkap proyek
+├── HowToRun.md                 # Petunjuk menjalankan aplikasi
+├── checklist_mvp.md            # Checklist fitur MVP & status pengujian
+├── CHANGELOG.md                # Catatan perubahan
+├── demo.mp4                    # Video demo alur lengkap
+├── docs/
+│   ├── LAPORAN_KEAMANAN.md     # Hasil uji keamanan & perbaikan
+│   └── LOG_DAN_ERROR.md        # Contoh log, penyebab error, tindakan perbaikan
 ├── templates/
-│   └── index.html              # Antarmuka Pengguna (UI) responsif & dinamis
+│   ├── index.html              # Dashboard (UI)
+│   └── error.html              # Halaman error 400/404/405/413/500
 ├── static/
-│   └── css/
-│       └── style.css           # Stylesheet antarmuka
-├── tests/                      # Suite Pengujian Unit Test (5 files)
+│   ├── css/style.css           # Stylesheet antarmuka
+│   └── js/app.js               # Konfirmasi hapus/reset & indikator loading
+├── tests/                      # 55 unit test di 9 file
 │   ├── __init__.py
 │   ├── test_saldo.py
 │   ├── test_transaksi_pemasukan.py
 │   ├── test_transaksi_pengeluaran.py
 │   ├── test_kalkulasi_saldo.py
-│   └── test_hapus_dan_validasi.py
+│   ├── test_hapus_dan_validasi.py
+│   ├── test_validasi_input.py
+│   ├── test_penyimpanan.py
+│   ├── test_integrasi_app.py
+│   └── test_keamanan.py
+├── data/                       # (dibuat otomatis, di-gitignore) database SQLite
+└── logs/                       # (dibuat otomatis, di-gitignore) file log
 ```
