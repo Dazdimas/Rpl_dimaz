@@ -92,3 +92,28 @@ OK
 | 5 | Tanggal default memakai UTC (JavaScript) | Tanggal mundur 1 hari di WIB antara jam 00.00–07.00 | Tanggal default dari server (`date.today()`) | uji manual |
 
 Uji regresi: setelah semua perbaikan, ke-26 test lama tetap lulus bersama 29 test baru (total 55).
+
+## G. Verifikasi Fresh Clone
+
+Dilakukan pada 22 Oktober 2026 dari folder kosong, dengan virtual environment baru, terhadap branch `feat/mvp-final` (commit `b3ade2e`).
+
+```
+$ git clone -b feat/mvp-final https://github.com/Dazdimas/Rpl_dimaz.git
+$ cd Rpl_dimaz
+$ python -m venv venv
+$ venv/Scripts/python -m pip install -r requirements.txt
+  → Flask 3.1.3, Werkzeug 3.1.9, Jinja2 3.1.6, MarkupSafe 3.0.4, itsdangerous 2.2.0, click 8.5.0, blinker 1.9.0
+$ venv/Scripts/python -m unittest discover -s tests
+Ran 55 tests in 1.183s
+OK
+$ PORT=5001 venv/Scripts/python app.py
+```
+
+| Pemeriksaan pada aplikasi hasil clone | Hasil |
+|---|---|
+| `GET /` (dashboard) | ✅ 200 |
+| `POST /set-saldo` dengan token CSRF | ✅ 302, saldo tersimpan |
+| `POST /tambah` dengan token CSRF | ✅ 302, transaksi tersimpan |
+| `GET /api/ringkasan` | ✅ 200, saldo akhir Rp 75.000 sesuai perhitungan |
+| `GET /static/css/style.css`, `/static/js/app.js` | ✅ 200 |
+| `data/keuangan.db` & `logs/app.log` dibuat otomatis | ✅ |
