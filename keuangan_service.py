@@ -112,3 +112,4 @@ class PencatatKeuangan:
         self.saldo_awal = 0.0
         self.transaksi = []
         self._next_id = 1
+

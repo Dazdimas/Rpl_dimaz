@@ -170,6 +170,9 @@ Rpl_dimaz/
 ├── README.md                   # Dokumentasi lengkap proyek
 ├── templates/
 │   └── index.html              # Antarmuka Pengguna (UI) responsif & dinamis
+├── static/
+│   └── css/
+│       └── style.css           # Stylesheet antarmuka
 ├── tests/                      # Suite Pengujian Unit Test (5 files)
 │   ├── __init__.py
 │   ├── test_saldo.py
