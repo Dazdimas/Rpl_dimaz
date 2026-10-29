@@ -3,294 +3,139 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pencatat Keuangan RPL - Kelola Arus Kas & Saldo</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Pencatat Keuangan</title>
     <link rel="stylesheet" href="assets/style.css" />
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen">
-    <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2"></div>
+<body>
+    <div class="container">
+        <h1>Pencatat Keuangan</h1>
 
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-sm">
-                    Rp
-                </div>
-                <div>
-                    <h1 class="text-lg font-bold text-slate-900 leading-tight">Pencatat Keuangan RPL</h1>
-                    <p class="text-xs text-slate-500">Aplikasi Pengelola Pemasukan, Pengeluaran & Saldo Harian</p>
-                </div>
+        <section class="summary">
+            <div class="card">
+                <label>Saldo Awal</label>
+                <strong id="saldoAwal">Rp 0</strong>
             </div>
-            <div class="flex items-center space-x-3">
-                <button id="btnAturSaldoAwal" class="inline-flex items-center px-3.5 py-2 border border-slate-300 text-sm font-medium rounded-lg text-slate-700 bg-white hover:bg-slate-50 transition shadow-sm">
-                    <svg class="w-4 h-4 mr-1.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    Atur Saldo Awal
-                </button>
-                <a href="#formSection" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg shadow-sm transition">
-                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    Tambah Transaksi
-                </a>
+            <div class="card pemasukan">
+                <label>Pemasukan</label>
+                <strong id="totalPemasukan">Rp 0</strong>
             </div>
-        </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        <section aria-label="Ringkasan Keuangan">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm relative overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Saldo Awal</span>
-                        <span class="p-2 bg-slate-100 rounded-lg text-slate-600">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
-                        </span>
-                    </div>
-                    <div class="mt-3">
-                        <span id="saldoAwal" class="text-2xl font-extrabold text-slate-900 tracking-tight">Rp 0</span>
-                    </div>
-                    <p class="text-xs text-slate-400 mt-2">Dasar perhitungan awal buku</p>
-                </div>
-
-                <div class="bg-white rounded-2xl p-5 border border-emerald-100 shadow-sm relative overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Total Pemasukan</span>
-                        <span class="p-2 bg-emerald-50 rounded-lg text-emerald-600">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path></svg>
-                        </span>
-                    </div>
-                    <div class="mt-3">
-                        <span id="totalPemasukan" class="text-2xl font-extrabold text-emerald-600 tracking-tight">Rp 0</span>
-                    </div>
-                    <p id="totalPemasukanCount" class="text-xs text-emerald-500 mt-2">0 transaksi masuk</p>
-                </div>
-
-                <div class="bg-white rounded-2xl p-5 border border-rose-100 shadow-sm relative overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-rose-600 uppercase tracking-wider">Total Pengeluaran</span>
-                        <span class="p-2 bg-rose-50 rounded-lg text-rose-600">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path></svg>
-                        </span>
-                    </div>
-                    <div class="mt-3">
-                        <span id="totalPengeluaran" class="text-2xl font-extrabold text-rose-600 tracking-tight">Rp 0</span>
-                    </div>
-                    <p id="totalPengeluaranCount" class="text-xs text-rose-500 mt-2">0 transaksi keluar</p>
-                </div>
-
-                <div class="bg-white rounded-2xl p-5 border border-indigo-100 shadow-sm relative overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-indigo-600 uppercase tracking-wider">Saldo Akhir</span>
-                        <span class="p-2 bg-indigo-50 rounded-lg text-indigo-600">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        </span>
-                    </div>
-                    <div class="mt-3">
-                        <span id="saldoAkhir" class="text-2xl font-extrabold text-indigo-600 tracking-tight">Rp 0</span>
-                    </div>
-                    <p id="totalTransaksiCount" class="text-xs text-slate-400 mt-2">Total 0 transaksi tercatat</p>
-                </div>
+            <div class="card pengeluaran">
+                <label>Pengeluaran</label>
+                <strong id="totalPengeluaran">Rp 0</strong>
+            </div>
+            <div class="card saldo">
+                <label>Saldo Akhir</label>
+                <strong id="saldoAkhir">Rp 0</strong>
             </div>
         </section>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <section id="formSection" class="lg:col-span-1 bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-                <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
+        <section class="form-box">
+            <h2 id="formTitle">Tambah Transaksi</h2>
+            <form id="formTransaksi">
+                <div class="grid-form">
                     <div>
-                        <h2 class="text-lg font-bold text-slate-900">Catat Transaksi</h2>
-                        <p class="text-xs text-slate-500">Masukkan transaksi pemasukan atau pengeluaran</p>
-                    </div>
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                </div>
-
-                <form id="formTransaksi" class="space-y-4">
-                    <div>
-                        <label for="tanggal" class="block text-xs font-semibold text-slate-600 mb-1">Tanggal</label>
-                        <input type="date" id="tanggal" name="tanggal" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" />
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Jenis Transaksi</label>
-                        <div class="grid grid-cols-2 gap-3">
-                            <label class="flex items-center justify-center p-2.5 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50 has-[:checked]:text-emerald-700">
-                                <input type="radio" name="jenis" value="pemasukan" class="sr-only" checked />
-                                <span class="text-sm font-semibold flex items-center">
-                                    <svg class="w-4 h-4 mr-1 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path></svg>
-                                    Pemasukan
-                                </span>
-                            </label>
-                            <label class="flex items-center justify-center p-2.5 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition has-[:checked]:border-rose-500 has-[:checked]:bg-rose-50 has-[:checked]:text-rose-700">
-                                <input type="radio" name="jenis" value="pengeluaran" class="sr-only" />
-                                <span class="text-sm font-semibold flex items-center">
-                                    <svg class="w-4 h-4 mr-1 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path></svg>
-                                    Pengeluaran
-                                </span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label for="kategori" class="block text-xs font-semibold text-slate-600 mb-1">Kategori</label>
-                        <select id="kategori" name="kategori" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-white">
-                            <option value="Gaji Pokok">Gaji Pokok</option>
-                            <option value="Bonus & Usaha">Bonus & Usaha</option>
-                            <option value="Makanan & Minuman">Makanan & Minuman</option>
-                            <option value="Kebutuhan Rumah">Kebutuhan Rumah</option>
-                            <option value="Transportasi">Transportasi</option>
-                            <option value="Lain-lain">Lain-lain</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="nominal" class="block text-xs font-semibold text-slate-600 mb-1">Nominal (Rp)</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-sm font-semibold text-slate-400">Rp</span>
-                            <input type="number" id="nominal" name="nominal" min="1" placeholder="0" required class="w-full pl-11 pr-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" />
-                        </div>
-                    </div>
-
-                    <div>
-                        <label for="keterangan" class="block text-xs font-semibold text-slate-600 mb-1">Keterangan</label>
-                        <textarea id="keterangan" name="keterangan" rows="2" placeholder="Contoh: Belanja bahan dapur bulanan" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"></textarea>
-                    </div>
-
-                    <button type="submit" id="btnSimpan" class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-sm transition flex items-center justify-center space-x-2">
-                        <span>Simpan Transaksi</span>
-                    </button>
-                </form>
-            </section>
-
-            <section class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-100 mb-5">
-                    <div>
-                        <h2 class="text-lg font-bold text-slate-900">Riwayat Transaksi</h2>
-                        <p class="text-xs text-slate-500">Semua catatan transaksi pemasukan dan pengeluaran</p>
-                    </div>
-
-                    <div class="flex items-center gap-2">
-                        <div class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-50 text-xs font-medium">
-                            <button type="button" class="filter-btn px-3 py-1.5 rounded-md bg-white text-indigo-600 font-semibold shadow-sm transition" data-filter="semua">Semua</button>
-                            <button type="button" class="filter-btn px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition" data-filter="pemasukan">Pemasukan</button>
-                            <button type="button" class="filter-btn px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition" data-filter="pengeluaran">Pengeluaran</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                        </span>
-                        <input type="text" id="searchInput" placeholder="Cari keterangan atau kategori transaksi..." class="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" />
-                    </div>
-                </div>
-
-                <div class="overflow-x-auto flex-1">
-                    <table class="min-w-full divide-y divide-slate-200 text-left text-sm">
-                        <thead class="bg-slate-50 text-slate-500 uppercase font-semibold text-xs tracking-wider">
-                            <tr>
-                                <th class="py-3 px-4">Tanggal</th>
-                                <th class="py-3 px-4">Jenis</th>
-                                <th class="py-3 px-4">Kategori & Keterangan</th>
-                                <th class="py-3 px-4 text-right">Nominal</th>
-                                <th class="py-3 px-4 text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody" class="divide-y divide-slate-100"></tbody>
-                    </table>
-
-                    <div id="emptyState" class="hidden py-12 text-center">
-                        <svg class="w-12 h-12 mx-auto text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        <h3 class="mt-2 text-sm font-semibold text-slate-700">Belum ada transaksi</h3>
-                        <p class="text-xs text-slate-400 mt-1">Tambahkan transaksi baru untuk mulai mencatat keuangan.</p>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <div id="modalSaldo" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                <h3 class="text-base font-bold text-slate-900">Atur Saldo Awal</h3>
-                <button type="button" class="close-modal text-slate-400 hover:text-slate-600 transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            <form id="formSaldoAwal" class="space-y-4">
-                <div>
-                    <label for="inputSaldoAwal" class="block text-xs font-semibold text-slate-600 mb-1">Nominal Saldo Awal (Rp)</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-sm font-semibold text-slate-400">Rp</span>
-                        <input type="number" id="inputSaldoAwal" min="0" required class="w-full pl-11 pr-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" />
-                    </div>
-                    <p class="text-xs text-slate-400 mt-1">Nominal ini menjadi saldo dasar saat memulai pembukuan.</p>
-                </div>
-                <div class="flex justify-end space-x-2 pt-2">
-                    <button type="button" class="close-modal px-4 py-2 border border-slate-300 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 transition">Batal</button>
-                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition">Simpan Perubahan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div id="modalEdit" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                <h3 class="text-base font-bold text-slate-900">Ubah Transaksi</h3>
-                <button type="button" class="close-modal-edit text-slate-400 hover:text-slate-600 transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            <form id="formEditTransaksi" class="space-y-4">
-                <input type="hidden" id="editId" />
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label for="editTanggal" class="block text-xs font-semibold text-slate-600 mb-1">Tanggal</label>
-                        <input type="date" id="editTanggal" required class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" />
+                        <label for="tanggal">Tanggal</label>
+                        <input type="date" id="tanggal" name="tanggal" required />
                     </div>
                     <div>
-                        <label for="editJenis" class="block text-xs font-semibold text-slate-600 mb-1">Jenis</label>
-                        <select id="editJenis" required class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-white">
+                        <label for="jenis">Jenis</label>
+                        <select id="jenis" name="jenis" required>
                             <option value="pemasukan">Pemasukan</option>
                             <option value="pengeluaran">Pengeluaran</option>
                         </select>
                     </div>
+                    <div>
+                        <label for="kategori">Kategori</label>
+                        <select id="kategori" name="kategori" required></select>
+                    </div>
+                    <div>
+                        <label for="nominal">Nominal</label>
+                        <input type="number" id="nominal" name="nominal" min="1" required />
+                    </div>
+                    <div>
+                        <label for="keterangan">Keterangan</label>
+                        <input type="text" id="keterangan" name="keterangan" placeholder="Contoh: Gaji bulanan" required />
+                    </div>
                 </div>
-                <div>
-                    <label for="editKategori" class="block text-xs font-semibold text-slate-600 mb-1">Kategori</label>
-                    <input type="text" id="editKategori" required class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" />
-                </div>
-                <div>
-                    <label for="editNominal" class="block text-xs font-semibold text-slate-600 mb-1">Nominal (Rp)</label>
-                    <input type="number" id="editNominal" min="1" required class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" />
-                </div>
-                <div>
-                    <label for="editKeterangan" class="block text-xs font-semibold text-slate-600 mb-1">Keterangan</label>
-                    <textarea id="editKeterangan" rows="2" required class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"></textarea>
-                </div>
-                <div class="flex justify-end space-x-2 pt-2">
-                    <button type="button" class="close-modal-edit px-4 py-2 border border-slate-300 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 transition">Batal</button>
-                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition">Simpan Perubahan</button>
+                <div class="form-actions">
+                    <button type="submit" id="btnSimpan">Simpan Transaksi</button>
+                    <button type="button" id="btnBatal" class="btn-secondary" hidden>Batal Edit</button>
                 </div>
             </form>
-        </div>
+        </section>
+
+        <section class="two-col">
+            <div class="form-box">
+                <h2>Batas Anggaran Bulanan</h2>
+                <form id="formBudget" class="budget-form">
+                    <div>
+                        <label for="budgetBulanan">Batas pengeluaran per bulan</label>
+                        <input type="number" id="budgetBulanan" min="0" required />
+                    </div>
+                    <div>
+                        <label for="bulanBudget">Bulan</label>
+                        <input type="month" id="bulanBudget" />
+                    </div>
+                    <button type="submit">Simpan Batas</button>
+                </form>
+
+                <div class="progress">
+                    <div class="progress-bar" id="budgetBar"></div>
+                </div>
+                <p id="budgetInfo" class="muted"></p>
+            </div>
+
+            <div class="form-box">
+                <h2>Pengeluaran per Kategori</h2>
+                <div class="chart-wrap">
+                    <canvas id="chartPengeluaran"></canvas>
+                </div>
+                <p id="chartKosong" class="muted" hidden>Belum ada pengeluaran pada data yang ditampilkan.</p>
+            </div>
+        </section>
+
+        <section class="table-box">
+            <h2>Riwayat Transaksi</h2>
+
+            <div class="filter-bar">
+                <div>
+                    <label for="filterDari">Dari tanggal</label>
+                    <input type="date" id="filterDari" />
+                </div>
+                <div>
+                    <label for="filterSampai">Sampai tanggal</label>
+                    <input type="date" id="filterSampai" />
+                </div>
+                <div>
+                    <label for="filterKategori">Kategori</label>
+                    <select id="filterKategori">
+                        <option value="">Semua kategori</option>
+                    </select>
+                </div>
+                <div>
+                    <button type="button" id="btnResetFilter" class="btn-secondary">Reset Filter</button>
+                </div>
+            </div>
+
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Jenis</th>
+                            <th>Kategori</th>
+                            <th>Keterangan</th>
+                            <th>Nominal</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </section>
     </div>
 
-    <div id="modalHapus" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl space-y-4 text-center">
-            <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 mx-auto flex items-center justify-center">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-            </div>
-            <div>
-                <h3 class="text-base font-bold text-slate-900">Konfirmasi Hapus</h3>
-                <p class="text-xs text-slate-500 mt-1">Apakah Anda yakin ingin menghapus transaksi ini? Tindakan ini tidak dapat dibatalkan.</p>
-            </div>
-            <div class="flex justify-center space-x-2 pt-2">
-                <button type="button" id="btnBatalHapus" class="px-4 py-2 border border-slate-300 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 transition">Batal</button>
-                <button type="button" id="btnKonfirmasiHapus" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-sm font-semibold transition">Ya, Hapus</button>
-            </div>
-        </div>
-    </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <script src="assets/app.js"></script>
 </body>
 </html>

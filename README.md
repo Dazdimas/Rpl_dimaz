@@ -1,207 +1,278 @@
-# 💰 Pencatat Keuangan Harian (Keuangan RPL)
+# 💰 Sistem Informasi Pencatat Keuangan Harian
 
-### Aplikasi web full-stack untuk mencatat pemasukan, pengeluaran, dan saldo harian
+### Sistem Informasi Pencatat Keuangan Harian Berbasis Web
 
 ## 📌 Deskripsi
 
-**Pencatat Keuangan Harian** adalah aplikasi berbasis web yang dirancang untuk membantu pengguna mengelola dan memantau arus kas pribadi maupun kelompok. Pengguna dapat menentukan saldo awal, mencatat transaksi pemasukan atau pengeluaran, memperbarui data transaksi, menghapus transaksi dengan dialog konfirmasi, serta memantau ringkasan saldo keuangan harian secara real-time.
+**Sistem Informasi Pencatat Keuangan Harian** adalah aplikasi berbasis web yang dibuat untuk membantu pengguna mencatat dan memantau arus kas harian secara sederhana dan terorganisir. Aplikasi ini memungkinkan pengguna untuk mencatat pemasukan, pengeluaran, serta saldo yang tersisa berdasarkan transaksi yang telah dilakukan.
 
-Aplikasi ini dibangun menggunakan arsitektur bersih terpisah antara **Backend (PHP Native REST API)** dan **Frontend (HTML5, Tailwind CSS, JavaScript)** dengan basis data **MySQL**.
+Pengguna dapat menginput saldo awal, menambahkan transaksi, dan melihat ringkasan keuangan dalam satu tampilan. Data yang tercatat akan membantu pengguna memahami kondisi keuangan mereka dalam periode tertentu.
 
 ---
 
 ## 🎯 Tujuan
 
-- Memudahkan pencatatan transaksi keuangan harian secara terstruktur.
-- Menyediakan antarmuka ringkasan keuangan (Saldo Awal, Total Pemasukan, Total Pengeluaran, dan Saldo Akhir).
-- Menyediakan operasi CRUD lengkap untuk transaksi (Create, Read, Update, Delete).
-- Mengintegrasikan penyimpanan persisten menggunakan database MySQL dengan skema relasional dan data awal (seeder).
-- Menyediakan fitur pencarian dan filter transaksi berdasarkan jenis (Semua / Pemasukan / Pengeluaran).
+Sistem ini dibuat dengan tujuan:
+
+- Mempermudah pengguna dalam mencatat pemasukan dan pengeluaran harian.
+- Menampilkan total pemasukan dan total pengeluaran secara otomatis.
+- Menghitung saldo akhir berdasarkan saldo awal dan transaksi yang telah ditambahkan.
+- Menyediakan riwayat transaksi agar pengguna dapat memantau kegiatan keuangannya.
+- Membantu proses pencatatan keuangan menjadi lebih terstruktur dan mudah dipahami.
+
+---
+
+## 💡 Manfaat
+
+### 👤 Bagi Pengguna
+
+- Dapat mencatat pemasukan dan pengeluaran dengan lebih cepat.
+- Tidak perlu menghitung manual karena sistem menghitung saldo secara otomatis.
+- Dapat melihat ringkasan keuangan secara langsung.
+- Dapat memantau riwayat transaksi dengan lebih jelas.
+
+### 👨‍💼 Bagi Admin / Pengelola
+
+- Mempermudah pengelolaan data transaksi keuangan.
+- Mengurangi risiko kesalahan pencatatan manual.
+- Mempermudah analisis pemasukan dan pengeluaran.
+- Membantu dalam pengambilan keputusan keuangan secara lebih cepat.
+
+---
+
+## 👥 Pengguna Sistem
+
+Sistem memiliki **2 jenis pengguna**:
+
+### 1. Pengguna
+
+Pengguna dapat:
+
+- Mengatur saldo awal.
+- Menambahkan transaksi pemasukan dan pengeluaran.
+- Melihat ringkasan saldo.
+- Melihat riwayat transaksi.
+
+### 2. Admin
+
+Admin dapat:
+
+- Mengelola data transaksi.
+- Melihat data pengguna dan semua catatan keuangan.
+- Mengawasi saldo serta catatan pemasukan dan pengeluaran.
+- Mengelola sistem secara keseluruhan.
 
 ---
 
 ## ⚙️ Fitur Utama
 
-### 1. Pengaturan Saldo Awal
-Pengguna dapat menentukan atau memperbarui nominal saldo awal kapan saja sebagai dasar perhitungan saldo akhir.
+### 🔐 1. Pengaturan Saldo Awal
 
-### 2. Pencatatan Transaksi (Pemasukan & Pengeluaran)
-Setiap transaksi mencatat:
+Pengguna dapat memasukkan nominal saldo awal yang menjadi dasar perhitungan saldo akhir.
+
+### 💵 2. Pencatatan Transaksi
+
+Pengguna dapat menambahkan transaksi dengan data berikut:
+
 - Tanggal transaksi
-- Jenis transaksi (`pemasukan` atau `pengeluaran`)
-- Kategori transaksi (Gaji, Usaha, Kebutuhan Rumah, Makan, Transportasi, dll.)
-- Keterangan transaksi
-- Nominal transaksi dalam Rupiah
+- Jenis transaksi (pemasukan/pengeluaran)
+- Keterangan
+- Nominal
 
-### 3. Ringkasan Keuangan (Dashboard)
-Aplikasi menampilkan kartu ringkasan keuangan yang diperbarui secara instan:
-- **Saldo Awal**
-- **Total Pemasukan**
-- **Total Pengeluaran**
-- **Saldo Akhir**
+### 📊 3. Ringkasan Keuangan
 
-Rumus perhitungan saldo akhir:
-```text
-Saldo Akhir = Saldo Awal + Total Pemasukan - Total Pengeluaran
-```
+Sistem menampilkan:
 
-### 4. Manajemen Riwayat Transaksi (CRUD & Filter)
-- **Tabel Transaksi:** Menampilkan seluruh riwayat transaksi dengan badge warna (Hijau untuk Pemasukan, Merah untuk Pengeluaran).
-- **Filter Jenis:** Menyaring transaksi berdasarkan Semua, Pemasukan saja, atau Pengeluaran saja.
-- **Pencarian:** Mencari transaksi berdasarkan kata kunci keterangan atau kategori.
-- **Ubah (Edit):** Form modal untuk memperbarui data transaksi yang sudah tersimpan.
-- **Hapus (Delete):** Modal dialog konfirmasi sebelum penghapusan data transaksi.
+- Saldo awal
+- Total pemasukan
+- Total pengeluaran
+- Saldo akhir
 
----
-
-## 📂 Struktur Proyek
+Perhitungan saldo dilakukan dengan rumus:
 
 ```text
-keuangan_RPL/
-├── backend/
-│   ├── api.php           # Router dan handler REST API (GET, POST, PUT, DELETE)
-│   ├── config.php        # Konfigurasi database MySQL, migrasi otomatis & service
-│   ├── database.sql      # Skema database MySQL & data awal (seed)
-│   └── index.php         # Halaman dokumentasi & status server backend
-├── frontend/
-│   ├── assets/
-│   │   ├── app.js        # Logika aplikasi frontend, interaksi API, state & filter
-│   │   └── style.css     # Styling kustom, animasi toast, dan badge status
-│   └── index.html        # Antarmuka dashboard pengguna berbasis Tailwind CSS
-└── README.md             # Dokumentasi lengkap proyek
+Saldo akhir = Saldo awal + Total pemasukan - Total pengeluaran
+```
+
+### 🧾 4. Riwayat Transaksi
+
+Transaksi yang telah ditambahkan akan ditampilkan dalam tabel agar pengguna dapat memantau aktivitas keuangan.
+
+---
+
+## 🔄 Alur Sistem
+
+```text
+Pengguna
+    ↓
+Login / Akses Aplikasi
+    ↓
+Input Saldo Awal
+    ↓
+Tambah Transaksi
+    ↓
+Pilih Jenis Transaksi
+    ↓
+Input Tanggal, Keterangan, Nominal
+    ↓
+Sistem Menghitung Saldo
+    ↓
+Lihat Ringkasan & Riwayat Transaksi
 ```
 
 ---
 
-## 🛠️ Teknologi yang Digunakan
+## 🗄️ Database
 
-- **Backend:** PHP Native (PHP 8.x) dengan ekstensi PDO MySQL
-- **Frontend:** HTML5, Tailwind CSS, JavaScript Vanilla (ES6+)
-- **Database:** MySQL / MariaDB (XAMPP / MySQL Server)
-- **Format Pertukaran Data:** JSON dengan struktur standar PascalCase (`Success`, `Message`, `Data`, `Summary`)
+Database dibuat sederhana dengan beberapa tabel utama.
 
----
+### `users`
 
-## 🗄️ Skema Basis Data (MySQL)
+```text
+id
+nama
+email
+password
+role
+```
 
-Database yang digunakan bernama `keuangan_rpl` dengan tabel-tabel berikut:
+### `transaksi`
 
-### 1. Tabel `pengaturan`
-Menyimpan konfigurasi saldo awal:
-- `id` (INT, Primary Key, Auto Increment)
-- `kunci` (VARCHAR(50), Unique)
-- `nilai` (VARCHAR(255))
-- `keterangan` (VARCHAR(255))
-- `updated_at` (TIMESTAMP)
+```text
+id
+user_id
+tanggal
+jenis_transaksi
+keterangan
+nominal
+```
 
-### 2. Tabel `kategori`
-Menyimpan daftar kategori transaksi:
-- `id` (INT, Primary Key, Auto Increment)
-- `nama` (VARCHAR(100))
-- `jenis` (ENUM: `pemasukan`, `pengeluaran`)
-- `created_at` (TIMESTAMP)
+### Relasi
 
-### 3. Tabel `transaksi`
-Menyimpan data catatan transaksi keuangan:
-- `id` (INT, Primary Key, Auto Increment)
-- `tanggal` (DATE)
-- `jenis` (ENUM: `pemasukan`, `pengeluaran`)
-- `kategori` (VARCHAR(100))
-- `keterangan` (VARCHAR(255))
-- `nominal` (BIGINT)
-- `created_at` (TIMESTAMP)
-
-> **Catatan:** Backend telah dilengkapi fitur *auto-create* database dan migrasi/seeding otomatis saat pertama kali dijalankan, atau file `backend/database.sql` dapat diimpor langsung ke phpMyAdmin / MySQL CLI.
+```text
+users
+  │
+  │ 1
+  │
+  │ *
+  ▼
+transaksi
+```
 
 ---
 
-## 💻 Cara Menjalankan Aplikasi
+## 🖥️ Halaman Sistem
 
-Pastikan **PHP** dan server **MySQL** (misal melalui XAMPP) sudah berjalan di komputer Anda.
+### 👤 Pengguna
 
-### 1. Jalankan Backend API
+- Login
+- Dashboard
+- Form Saldo Awal
+- Form Transaksi
+- Ringkasan Keuangan
+- Riwayat Transaksi
 
-Buka terminal PowerShell pada direktori proyek:
+### 👨‍💼 Admin
+
+- Login Admin
+- Dashboard Admin
+- Manajemen Transaksi
+- Lihat Semua Data Keuangan
+- Kelola Data Pengguna
+
+---
+
+## 🛠️ Teknologi
+
+### Frontend
+
+- **HTML5**
+- **CSS**
+- **JavaScript**
+
+### Backend
+
+- **PHP**
+- **API REST**
+
+### Database
+
+- **MySQL**
+
+### Tools
+
+- Git
+- GitHub
+- Visual Studio Code
+- Postman
+
+---
+
+## 📋 Metode Pengembangan
+
+Project dikembangkan menggunakan konsep **Rekayasa Perangkat Lunak (RPL)** melalui beberapa tahapan:
+
+1. Analisis kebutuhan
+2. Perancangan sistem
+3. Perancangan database
+4. Perancangan UI
+5. Implementasi
+6. Pengujian
+7. Evaluasi
+
+---
+
+## 🧪 Pengujian
+
+Pengujian dilakukan untuk memastikan fitur sistem berjalan sesuai dengan kebutuhan.
+
+Fitur yang diuji meliputi:
+
+- Input saldo awal
+- Penambahan transaksi pemasukan
+- Penambahan transaksi pengeluaran
+- Perhitungan saldo otomatis
+- Tampilan ringkasan keuangan
+- Tampilan riwayat transaksi
+
+---
+
+## 💻 Persiapan dan Cara Menjalankan
+
+Pastikan PHP sudah terpasang di komputer Anda. Jalankan perintah berikut di terminal:
+
+### 1. Menjalankan backend
 
 ```powershell
 cd backend
 php -S localhost:8000
 ```
 
-Halaman status dan dokumentasi backend dapat diakses di:
-```text
-http://localhost:8000
-```
-Endpoint REST API beralamat di:
-```text
-http://localhost:8000/api.php
-```
-
-### 2. Jalankan Frontend
-
-Buka jendela terminal baru:
+### 2. Menjalankan frontend
 
 ```powershell
 cd frontend
 php -S localhost:8080
 ```
 
-Buka peramban (browser) dan akses alamat berikut:
+Kemudian buka alamat berikut di browser:
+
 ```text
 http://localhost:8080
 ```
 
----
+Untuk endpoint API backend, dapat diakses melalui:
 
-## 📡 Daftar Endpoint REST API
-
-| Metode | Endpoint | Deskripsi |
-| :--- | :--- | :--- |
-| `GET` | `/api.php?action=transactions` | Mengambil seluruh data transaksi dan ringkasan saldo |
-| `GET` | `/api.php?action=transactions&jenis=pemasukan` | Menyaring transaksi berdasarkan jenis |
-| `GET` | `/api.php?action=transactions&search=gaji` | Mencari transaksi berdasarkan kata kunci |
-| `GET` | `/api.php?action=transactions&id={id}` | Mengambil detail 1 transaksi berdasarkan ID |
-| `POST` | `/api.php?action=transactions` | Menambahkan transaksi baru |
-| `PUT` | `/api.php?action=transactions&id={id}` | Memperbarui data transaksi |
-| `DELETE` | `/api.php?action=transactions&id={id}` | Menghapus transaksi |
-| `GET` | `/api.php?action=saldo-awal` | Mengambil data nominal saldo awal |
-| `POST` | `/api.php?action=saldo-awal` | Mengubah nominal saldo awal |
-| `GET` | `/api.php?action=categories` | Mengambil daftar kategori transaksi |
-| `GET` | `/api.php?action=summary` | Mengambil data ringkasan keuangan harian |
-
----
-
-## 📋 Aturan Format & Respons API
-
-Respons API menggunakan format standar JSON dengan penamaan atribut PascalCase:
-
-```json
-{
-  "Success": true,
-  "Message": "Transaksi berhasil ditambahkan.",
-  "Data": {
-    "Id": 1,
-    "Tanggal": "2026-09-28",
-    "Jenis": "pemasukan",
-    "Kategori": "Gaji Pokok",
-    "Keterangan": "Gaji bulan ini",
-    "Nominal": 2500000,
-    "CreatedAt": "2026-09-28 13:55:42"
-  },
-  "Summary": {
-    "SaldoAwal": 5000000,
-    "TotalPemasukan": 3000000,
-    "TotalPengeluaran": 1200000,
-    "SaldoAkhir": 6800000,
-    "TotalTransaksi": 4,
-    "PemasukanCount": 2,
-    "PengeluaranCount": 2
-  }
-}
+```text
+http://localhost:8000/api.php
 ```
 
 ---
 
-## 🚧 Status Proyek
+## 🚀 Status Project
 
-**Status:** Selesai dan siap digunakan (Full-stack CRUD terintegrasi database MySQL).
+**Status:** 🚧 Dalam Pengembangan
+
+## 🚧 Status Project
+
+**Status:** Dalam pengembangan
