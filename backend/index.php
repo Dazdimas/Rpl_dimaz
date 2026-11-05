@@ -1,7 +1,13 @@
 <?php
 require __DIR__ . '/config.php';
 header('Content-Type: text/html; charset=utf-8');
+pasangHeaderKeamanan("default-src 'none'; style-src 'unsafe-inline'; frame-ancestors 'none'");
+pasangPenangananError(static function (string $ref): void {
+    http_response_code(500);
+    echo 'Terjadi kesalahan pada server. Kode referensi: ' . $ref;
+});
 
+$kunci = kunciData();
 $transactions = bacaData()['transactions'];
 
 $saldoAwal = hitungSaldoAwal();

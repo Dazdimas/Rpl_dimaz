@@ -1,5 +1,8 @@
 .env
 backend/data_storage.json
 backend/data.json
+storage/*
+!storage/.htaccess
+dist/
 .vscode/
 .idea/

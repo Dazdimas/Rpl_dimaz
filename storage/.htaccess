@@ -1,0 +1,2 @@
+# Lapisan pengaman jika repo ditaruh di bawah htdocs Apache/XAMPP.
+Require all denied

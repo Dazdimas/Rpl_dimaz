@@ -1,0 +1,30 @@
+=== A overflow
+POST#1 status=200 len=1211 head=
+Fatal error:  Uncaught TypeError: hitungTotal(): Return value must be of type int, float returned in <path server disensor>
+Stack trace:
+POST#2 status=200 len=1211 head=
+Fatal error:  Uncaught TypeError: hitungTotal(): Return value must be of type int, float returned in <path server disensor>
+Stack trace:
+GET api status=200
+
+Fatal error:  Uncaught TypeError: hitungTotal(): Return value must be of type int, float returned in <path server disensor>
+Stack trace:
+#0 <path server disensor>
+GET index status=200 fatal=yes
+
+=== B invalid utf8
+awal count=3
+setelah tambah count=4
+POST rusak status=200 bodylen=0 filesize=0
+GET sesudah count=3 (data pengguna: HILANG)
+filesize=0
+
+=== C array
+status=200
+
+Warning:  Array to string conversion in <path server disensor>
+{"success":true,"message":"T
+
+=== D corrupt
+status=200 isi file diawali: {
+    "budget_bulanan": 300000

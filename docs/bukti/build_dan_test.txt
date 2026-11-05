@@ -1,0 +1,59 @@
+Target : working tree
+PHP    : 8.2.12
+
+[PASS] SEC-01  Situs asing tidak boleh membaca data (CORS)
+       HTTP 403, Access-Control-Allow-Origin: (tidak ada)
+[PASS] SEC-02  Preflight DELETE dari origin asing ditolak
+       HTTP 403, Access-Control-Allow-Origin: (tidak ada)
+[PASS] SEC-03  CSRF: POST text/plain dari origin asing ditolak
+       HTTP 403, jumlah transaksi 3 -> 3
+[PASS] SEC-04  DELETE dari origin asing ditolak server
+       HTTP 403, jumlah transaksi 3 -> 3
+[PASS] SEC-05  File data tidak bisa diunduh lewat URL
+       GET /data.json -> HTTP 404
+[PASS] SEC-06  File sensitif & path traversal tidak terbuka
+       /.env=404, /.git/config=404, /../.git/config=404, /../storage/data.json=404
+[PASS] SEC-07  Tanggal mustahil (2026-99-99) ditolak
+       HTTP 400
+[PASS] SEC-08  Overflow nominal tidak melumpuhkan aplikasi
+       GET setelah 2x nominal PHP_INT_MAX -> HTTP 200, JSON valid: ya
+[PASS] SEC-09  Input UTF-8 rusak tidak menghapus file data
+       transaksi awal: 3, ukuran file data sesudah request: 743 byte
+[PASS] SEC-10  Pesan error tidak membocorkan path/stack trace
+       array di keterangan: bersih, error overflow: bersih
+[PASS] SEC-11  Nominal tidak valid/berlebihan ditolak
+       8 dari 8 nilai ditolak
+[PASS] SEC-12  Keterangan 1 MB ditolak
+       HTTP 413
+[PASS] SEC-13  Header keamanan pada API
+       lengkap
+[PASS] SEC-14  Versi PHP tidak diumumkan
+       X-Powered-By: (tidak ada)
+[PASS] SEC-15  File data rusak tidak ditimpa diam-diam
+       HTTP 500, file utuh
+[PASS] SEC-16  Payload XSS/SQLi tetap teks biasa di API
+       Content-Type: application/json; charset=utf-8; backend tidak memakai SQL
+[PASS] SEC-17  Frontend: SRI, CSP, dan escape output
+       lengkap
+[PASS] SEC-18  Log aktivitas ada dan bebas data sensitif
+       2 baris log, tanpa keterangan/nominal
+[OPEN] SEC-19  Autentikasi & otorisasi
+       GET tanpa kredensial -> HTTP 200; login belum diimplementasikan
+
+Ringkasan: 18 PASS, 0 FAIL, 1 OPEN (total 19)
+==> Merakit dist/keuangan-demo
+BUILD BERHASIL: 7 file di dist/keuangan-demo
+ anggaran
+[PASS] POST nominal tidak valid -> 400 dengan pesan
+[PASS] POST bukan JSON -> 415
+[PASS] POST JSON rusak -> 400
+[PASS] POST body > 16 KB -> 413
+[PASS] metode PATCH -> 405
+[PASS] Origin frontend diizinkan oleh CORS
+[PASS] preflight Origin frontend -> 204
+[PASS] Origin asing -> 403
+[PASS] halaman status backend tampil
+[PASS] error 500 generik dengan kode referensi yang ada di log
+
+ALL PASSED: 60/60 test lulus
+==> Pindai keamanan

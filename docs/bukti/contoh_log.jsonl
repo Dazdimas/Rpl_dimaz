@@ -1,0 +1,8 @@
+{"waktu":"2026-11-05T02:44:56+01:00","level":"INFO","event":"transaksi.ditambah","metode":"POST","path":"/api.php","id":4,"jenis":"pengeluaran","kategori":"Makanan"}
+{"waktu":"2026-11-05T02:44:56+01:00","level":"INFO","event":"transaksi.diubah","metode":"PUT","path":"/api.php","id":4}
+{"waktu":"2026-11-05T02:44:56+01:00","level":"INFO","event":"budget.diubah","metode":"POST","path":"/api.php","budget_bulanan":"[MASKED]"}
+{"waktu":"2026-11-05T02:44:56+01:00","level":"INFO","event":"transaksi.dihapus","metode":"DELETE","path":"/api.php","id":4}
+{"waktu":"2026-11-05T02:44:57+01:00","level":"WARNING","event":"permintaan.ditolak","metode":"DELETE","path":"/api.php","alasan":"origin_tidak_diizinkan","status":403}
+{"waktu":"2026-11-05T02:44:57+01:00","level":"WARNING","event":"permintaan.ditolak","metode":"POST","path":"/api.php","alasan":"validasi","status":400}
+{"waktu":"2026-11-05T02:44:57+01:00","level":"WARNING","event":"permintaan.ditolak","metode":"POST","path":"/api.php","alasan":"content_type","status":415}
+{"waktu":"2026-11-05T02:44:57+01:00","level":"ERROR","event":"error.tidak_tertangani","metode":"GET","path":"/api.php","ref":"4aee0ebd","jenis":"RuntimeException","pesan":"File data rusak atau tidak bisa dibaca.","lokasi":"config.php:190"}

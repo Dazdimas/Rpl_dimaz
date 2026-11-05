@@ -96,14 +96,14 @@ function renderTable(data) {
         const jenisClass = item.jenis === 'pemasukan' ? 'pemasukan-text' : 'pengeluaran-text';
 
         tr.innerHTML = `
-            <td>${item.tanggal}</td>
-            <td class="${jenisClass}">${item.jenis}</td>
+            <td>${escapeHtml(item.tanggal)}</td>
+            <td class="${jenisClass}">${escapeHtml(item.jenis)}</td>
             <td><span class="badge">${escapeHtml(item.kategori || 'Lain-lain')}</span></td>
             <td>${escapeHtml(item.keterangan)}</td>
             <td>${formatRupiah(item.nominal)}</td>
             <td class="aksi">
-                <button type="button" class="btn-small btn-edit" data-id="${item.id}">Edit</button>
-                <button type="button" class="btn-small btn-hapus" data-id="${item.id}">Hapus</button>
+                <button type="button" class="btn-small btn-edit" data-id="${Number(item.id)}">Edit</button>
+                <button type="button" class="btn-small btn-hapus" data-id="${Number(item.id)}">Hapus</button>
             </td>
         `;
 

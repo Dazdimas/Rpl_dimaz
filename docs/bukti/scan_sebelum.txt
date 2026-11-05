@@ -1,0 +1,43 @@
+Target : versi lama (--legacy)
+PHP    : 8.2.12
+
+[FAIL] SEC-01  Situs asing tidak boleh membaca data (CORS)
+       HTTP 200, Access-Control-Allow-Origin: *
+[FAIL] SEC-02  Preflight DELETE dari origin asing ditolak
+       HTTP 200, Access-Control-Allow-Origin: *
+[FAIL] SEC-03  CSRF: POST text/plain dari origin asing ditolak
+       HTTP 200, jumlah transaksi 3 -> 4
+[FAIL] SEC-04  DELETE dari origin asing ditolak server
+       HTTP 200, jumlah transaksi 3 -> 2
+[FAIL] SEC-05  File data tidak bisa diunduh lewat URL
+       GET /data.json -> HTTP 200 (file lama masih di backend/; jalankan aplikasi sekali agar pindah ke storage/)
+[PASS] SEC-06  File sensitif & path traversal tidak terbuka
+       /.env=404, /.git/config=404, /../.git/config=404, /../storage/data.json=404
+[FAIL] SEC-07  Tanggal mustahil (2026-99-99) ditolak
+       HTTP 200
+[FAIL] SEC-08  Overflow nominal tidak melumpuhkan aplikasi
+       GET setelah 2x nominal PHP_INT_MAX -> HTTP 200, JSON valid: TIDAK
+[FAIL] SEC-09  Input UTF-8 rusak tidak menghapus file data
+       transaksi awal: 3, ukuran file data sesudah request: 0 byte
+[FAIL] SEC-10  Pesan error tidak membocorkan path/stack trace
+       array di keterangan: BOCOR, error overflow: BOCOR
+[FAIL] SEC-11  Nominal tidak valid/berlebihan ditolak
+       lolos: "12abc", "1e30", [5], true, 1.5, 9223372036854775807
+[FAIL] SEC-12  Keterangan 1 MB ditolak
+       HTTP 200
+[FAIL] SEC-13  Header keamanan pada API
+       kurang: x-content-type-options, content-security-policy, referrer-policy, cache-control
+[FAIL] SEC-14  Versi PHP tidak diumumkan
+       X-Powered-By: PHP/8.2.12
+[FAIL] SEC-15  File data rusak tidak ditimpa diam-diam
+       HTTP 200, file DITIMPA
+[PASS] SEC-16  Payload XSS/SQLi tetap teks biasa di API
+       Content-Type: application/json; charset=utf-8; backend tidak memakai SQL
+[FAIL] SEC-17  Frontend: SRI, CSP, dan escape output
+       CDN tanpa SRI, tanpa CSP, field tanpa escape di innerHTML
+[FAIL] SEC-18  Log aktivitas ada dan bebas data sensitif
+       aplikasi tidak menulis log
+[OPEN] SEC-19  Autentikasi & otorisasi
+       GET tanpa kredensial -> HTTP 200; login belum diimplementasikan
+
+Ringkasan: 2 PASS, 16 FAIL, 1 OPEN (total 19)
