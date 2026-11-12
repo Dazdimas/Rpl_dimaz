@@ -2,6 +2,17 @@
 
 ### Sistem Informasi Pencatat Keuangan Harian Berbasis Web
 
+## 🌐 Demo Online
+
+| | Link |
+|---|---|
+| **Aplikasi web** | **https://keuangan-rpl.vercel.app** |
+| Backend API (PHP) | https://keuangan-rpl-api.vercel.app · data JSON: https://keuangan-rpl-api.vercel.app/api.php |
+
+Di-deploy ke Vercel dari branch `main`: project `keuangan-rpl` (folder `frontend/`) dan `keuangan-rpl-api` (folder `backend/`, runtime `vercel-php`). Setiap push ke `main` otomatis men-deploy ulang. Bukti deploy (screenshot, log build, hasil test) ada di [`docs/bukti/deploy/`](docs/bukti/deploy/).
+
+> ℹ️ Demo online belum memiliki login dan datanya disimpan sementara (`/tmp` Vercel), sehingga transaksi bisa kembali ke data contoh sewaktu-waktu. Jangan masukkan data keuangan asli.
+
 ## 📌 Deskripsi
 
 **Sistem Informasi Pencatat Keuangan Harian** adalah aplikasi berbasis web yang dibuat untuk membantu pengguna mencatat dan memantau arus kas harian secara sederhana dan terorganisir. Aplikasi ini memungkinkan pengguna untuk mencatat pemasukan, pengeluaran, serta saldo yang tersisa berdasarkan transaksi yang telah dilakukan.
@@ -20,7 +31,7 @@ Bagian kebutuhan di bawah menggambarkan rancangan sistem. Kode saat ini baru men
 | Login, peran Admin, tabel `users` | ❌ Belum ada |
 | Database MySQL | ❌ Belum dipakai. Data disimpan di `storage/data.json`, dan `backend/database.sql` hanya rancangan |
 
-> ⚠️ Karena belum ada login, jalankan aplikasi **hanya di `localhost`**. Lihat [Laporan Keamanan](docs/LAPORAN_KEAMANAN.md).
+> ⚠️ Karena belum ada login, demo online hanya untuk data contoh, dan instalasi lokal sebaiknya dijalankan **hanya di `localhost`**. Lihat [Laporan Keamanan](docs/LAPORAN_KEAMANAN.md).
 
 **Dokumen Pertemuan 8:** [Laporan Keamanan](docs/LAPORAN_KEAMANAN.md) · [Changelog](CHANGELOG.md) · [Log & Analisis Error](docs/LOG_DAN_ERROR.md) · [Verifikasi Akhir](docs/VERIFIKASI.md)
 
