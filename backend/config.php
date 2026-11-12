@@ -6,7 +6,10 @@ const BODY_MAKS_BYTE = 16384;
 const ORIGIN_BAWAAN = 'http://localhost:8080,http://127.0.0.1:8080';
 
 // Data disimpan di luar web root (backend/) agar tidak bisa diunduh lewat URL.
-define('STORAGE_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'storage');
+// Di Vercel (env VERCEL=1) filesystem read-only kecuali /tmp, dan /tmp tidak permanen.
+define('STORAGE_DIR', getenv('VERCEL')
+    ? sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'keuangan'
+    : dirname(__DIR__) . DIRECTORY_SEPARATOR . 'storage');
 define('DATA_FILE', getenv('KEUANGAN_DATA_FILE') ?: STORAGE_DIR . DIRECTORY_SEPARATOR . 'data.json');
 define('LOG_FILE', getenv('KEUANGAN_LOG_FILE') ?: STORAGE_DIR . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . 'app.log');
 

@@ -12,6 +12,7 @@ $fileRuntime = [
     'backend/index.php',
     'frontend/index.html',
     'frontend/assets/app.js',
+    'frontend/assets/config.js',
     'frontend/assets/style.css',
     'storage/.htaccess',
 ];

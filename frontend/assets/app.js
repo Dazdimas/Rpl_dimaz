@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:8000/api.php';
+const apiUrl = (window.APP_CONFIG && window.APP_CONFIG.apiUrl) || 'http://localhost:8000/api.php';
 
 const state = {
     transactions: [],
