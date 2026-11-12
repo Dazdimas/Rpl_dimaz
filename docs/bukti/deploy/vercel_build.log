@@ -1,0 +1,40 @@
+# Log build Vercel - frontend (https://keuangan-rpl.vercel.app)
+Vercel CLI 65.14.0
+2026-11-12T07:22:10.887Z  Running build in Washington, D.C., USA (East) – iad1
+2026-11-12T07:22:10.888Z  Build machine configuration: 2 cores, 8 GB
+2026-11-12T07:22:10.912Z  Retrieving list of deployment files...
+2026-11-12T07:22:11.076Z  Previous build caches not available.
+2026-11-12T07:22:11.332Z  Downloading 6 deployment files...
+2026-11-12T07:22:12.256Z  Running "vercel build"
+2026-11-12T07:22:12.269Z  Vercel CLI 65.14.0
+2026-11-12T07:22:13.494Z  BUILD BERHASIL: API_URL=[REDACTED], connect-src=https://keuangan-rpl-api.vercel.app
+2026-11-12T07:22:13.563Z  Build Completed in /vercel/output [430ms]
+2026-11-12T07:22:13.617Z  Deploying outputs...
+2026-11-12T07:22:14.462Z  Deployment completed
+2026-11-12T07:22:14.466Z  Creating build cache...
+2026-11-12T07:22:15.117Z  Skipping cache upload because no files were prepared
+status	● Ready
+
+# Log build Vercel - backend (https://keuangan-rpl-api.vercel.app)
+Vercel CLI 65.14.0
+2026-11-12T07:21:17.159Z  Running build in Washington, D.C., USA (East) – iad1
+2026-11-12T07:21:17.160Z  Build machine configuration: 2 cores, 8 GB
+2026-11-12T07:21:17.174Z  Retrieving list of deployment files...
+2026-11-12T07:21:17.562Z  Downloading 7 deployment files...
+2026-11-12T07:21:17.773Z  Restored build cache from previous deployment (FeXXRhvTgxF5f9yiBsEUMrtcaoKt)
+2026-11-12T07:21:18.156Z  Running "vercel build"
+2026-11-12T07:21:18.167Z  Vercel CLI 65.14.0
+2026-11-12T07:21:18.337Z  🐘 Downloading user files
+2026-11-12T07:21:18.343Z  🐘 Downloading PHP runtime files
+2026-11-12T07:21:18.355Z  🐘 Creating lambda
+2026-11-12T07:21:18.378Z  🐘 Downloading user files
+2026-11-12T07:21:18.378Z  🐘 Downloading PHP runtime files
+2026-11-12T07:21:18.387Z  🐘 Creating lambda
+2026-11-12T07:21:18.419Z  Build Completed in /vercel/output [87ms]
+2026-11-12T07:21:18.450Z  Deploying outputs...
+2026-11-12T07:21:29.405Z  Deployment completed
+2026-11-12T07:21:29.408Z  Creating build cache...
+2026-11-12T07:21:31.060Z  Created build cache: 2s
+2026-11-12T07:21:31.060Z  Uploading build cache [38.98 MB]
+2026-11-12T07:21:31.652Z  Build cache uploaded: 592.000ms
+status	● Ready
